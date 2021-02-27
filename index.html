@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Message</title>
+    <link rel="stylesheet" href="chatstyle.css">
+    <!-- Import font family -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet">
+    <!-- Page icon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/icon.png">
+</head>
+<body>
+
+    <!-- Pop Up that appears when entering to the chat asking for an username + room -->
+    <span id="pop-up">
+        <div id="signin">
+            <div class="user-info">
+                <div class="welcome">
+                    <h1>SIGN IN</h1>
+                </div>
+
+                <div class="user-name text-form">
+                    <h2>User Name</h2>
+                    <input class="input-form" id="input-user-name-signin" type="text" placeholder="User name"/>
+                </div>
+
+                <div class="user-email text-form">
+                    <h2>Email Adress</h2>
+                    <input class="input-form" id="input-email-signin" type="email" placeholder="Email Adress"/>
+                </div>
+
+                <div class="user-password text-form">
+                    <h2>Password</h2>
+                    <input class="input-form" id="input-password-signin" type="password" placeholder="Password"/>
+                </div>
+
+                <div id="selector">
+                    <label for="characters">Choose a character:</label>
+    
+                    <select id="Mycharacters">
+                        <option value="man1" selected>Man 1</option>
+                        <option value="man2">Man 2</option>
+                        <option value="man3">Man 3</option>
+                        <option value="man4">Man 4</option>
+                        <option value="woman1">Woman 1</option>
+                        <option value="woman2">Woman 2</option>
+                        <option value="woman3">Woman 3</option>
+                        <option value="woman4">Woman 4</option>
+                    </select>
+                </div>
+                
+                <!--
+                <div id="selector2">
+                    <label for="selectrooms">Choose a room:</label>
+    
+                    <select id="Myrooms">
+                        <option value="0" selected>Park</option>
+                        <option value="1">City</option>
+                    </select>
+                </div
+                -->
+            </div>
+            <div class="buttons">
+                <div class="btn-left">  
+                    <button class="btn" id="btn-close-signin" onclick="closePopUp( true )">SIGN IN</button>
+                </div>
+                <div class="btn-right">
+                    <button class="btn" id="btn-change-signin" onclick="changePopUp( true )">LOGIN</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="login" style="display: none;">
+            <div class="user-info">
+                <div class="welcome">
+                    <h1>LOGIN</h1>
+                </div>
+
+                <div class="user-name text-form">
+                    <h2>User Name</h2>
+                    <input class="input-form" id="input-user-name-login" type="text" placeholder="User name"/>
+                </div>
+
+                <div class="user-password  text-form">
+                    <h2>Password</h2>
+                    <input class="input-form" id="input-password-login" type="password" placeholder="Password"/>
+                </div>
+            </div>
+            <div class="buttons">
+                <div class="btn-left">  
+                    <button class="btn" id="btn-close-login" onclick="closePopUp( false )">LOGIN</button>
+                </div>
+                <div class="btn-right">
+                    <button class="btn" id="btn-change-login" onclick="changePopUp( false )">SIGN IN</button>
+                </div>
+            </div>
+        </div>
+        
+    </span>
+    
+
+    <div class="flex-container" id="body" style="display: none">
+        <div class="flex-item-left">
+            <h1>ANIMATION HERE</h1>
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="flex-item-right">
+            <div class="chat-box">
+                <!-- Title -->
+                <div id="chat-header">
+                    <h1>CHAT MESSAGE</h1>
+                </div>
+                <!-- Messages column -->
+                <div id="chat">
+                    
+                </div>
+                <!-- Where to write + send text -->
+                <div id="chat-footer">
+                    <input class="input-form" id="input-text" type="text" placeholder="Write something"/>
+                    <button class="btn" id="btn-send">SEND</button>                
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="src/user.js"></script>
+    <script src="src/client.js"></script>
+    <script src="libs/gl-matrix.js"></script>
+    <script src="libs/litegl.js"></script>
+    <script src="libs/rendeer.js"></script>
+    <script src="libs/wbin.js"></script>
+    <script src="src/utils.js"></script>
+    <script src="src/graphics.js"></script>
+
+</body>
+</html>
