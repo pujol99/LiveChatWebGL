@@ -1,7 +1,13 @@
 class User {
-    constructor( mesh_path, texture_path, _pos ) {
-        this.pos = { x: _pos[0], y: _pos[1]};
-        this.speed = 10;
+    constructor( mesh_path, texture_path, _pos, scale ) {
+        this.pos = _pos;
+        this.speed = 20;
+
+        this.id = 0;
+        this.username = "Anonymous";
+        this.email = "me@gmail.com";
+        this.password = "1234";
+        this.room_id = 0;
 
         this.object = new RD.SceneNode({
             mesh: mesh_path,
@@ -9,39 +15,18 @@ class User {
             position: _pos,
             texture: texture_path
         });
+        //this.object.scale(scale)
         scene.root.addChild( this.object );
     }
 
     update( elapsed_time ) {
-        var hasMoved = false;
-
-        var delta = [0,0,0];
-        if( gl.keys['W'] ) {
-            delta[2] = -1;
-            hasMoved = true;
-        } else if( gl.keys['S'] ) {
-            delta[2] = 1;
-            hasMoved = true;
-        }
-
-        vec3.scale( delta, delta, elapsed_time * 10 );
-        delta = this.object.getLocalVector( delta );
-        this.object.translate( delta );
-        
-        if( gl.keys['A'] ) {
-            this.object.rotate( elapsed_time*1, [0, 1, 0] );
-            hasMoved = true;
-        } else if( gl.keys['D'] ) {
-            this.object.rotate( elapsed_time*-1, [0, 1, 0] );
-            hasMoved = true;
-        }
-
-        if ( hasMoved )
-            cameraFollow(this.object);
+        personMovementUpdate(elapsed_time, this);
+        //personAnimationUpdate(this, "idle");
     }
-    
-    move() {
 
+    updatepos(pos){
+        this.pos = pos;
+        this.object.position = pos;
     }
     
     sendtoServer() {

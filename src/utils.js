@@ -1,3 +1,71 @@
+function loadAnimation(name, url){
+	var anim = new RD.SkeletalAnimation();
+	anim.load(url);
+	animations[name] = anim;
+}
+
+function cameraFollow(element) {
+    var m = element._global_matrix;
+    var eye = [0,0,0];
+    mat4.multiplyVec3( eye, m, [0,4,8] );
+    var center = [0,0,0];
+    mat4.multiplyVec3( center, m, [0,4,0] );
+    var up = [0,0,0];
+    mat4.rotateVec3( up, m, [0,1,0] );
+
+    camera.lookAt(eye, center, up);
+}
+
+//Resize the size of the canvas
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    camera.perspective(
+        90,     //FOV
+        canvas.width / canvas.height,   //aspect ratio
+        0.1,    //near
+        1000    //far
+    );
+}
+
+function personMovementUpdate(elapsed_time, person){
+    var hasMoved = false;
+
+    var delta = [0,0,0];
+    if( gl.keys['W'] ) {
+        delta[2] = -1;
+        hasMoved = true;
+    } else if( gl.keys['S'] ) {
+        delta[2] = 1;
+        hasMoved = true;
+    }
+
+    vec3.scale( delta, delta, elapsed_time * person.speed );
+    delta = person.object.getLocalVector( delta );
+    person.object.translate( delta );
+    
+    if( gl.keys['A'] ) {
+        person.object.rotate( elapsed_time * person.speed * 0.2, [0, 1, 0] );
+        hasMoved = true;
+    } else if( gl.keys['D'] ) {
+        person.object.rotate( -elapsed_time * person.speed * 0.2, [0, 1, 0] );
+        hasMoved = true;
+    }
+
+    if ( hasMoved )
+        cameraFollow(person.object);
+}
+
+function personAnimationUpdate(person, animation){
+    var anim = animations[ animation ];
+    if(anim && anim.duration)
+    {
+        anim.assignTime( getTime() * 0.001, true );
+        person.object.assignSkeleton( anim.skeleton );
+        person.object.shader = "texture_skinning";
+    }
+}
 
 function onMouse(e){
 
@@ -6,8 +74,8 @@ function onMouse(e){
             var ray = camera.getRay( e.canvasx, e.canvasy );
             var collision = ray.testPlane( [0,0,0], [0, 1, 0] );
             if ( collision ) {
-                player.position = ray.collision_point;
-                camera.lookAt( camera.position, player.position, [0, 1, 0] );
+                me.object.position = ray.collision_point;
+                camera.lookAt( camera.position, me.object.position, [0, 1, 0] );
             }
         }
     }
@@ -37,7 +105,6 @@ function onKey(e){
             free_cam = !free_cam;
             break;
         default:
-            //console.log(e.code);
             break;
     }
 }
@@ -46,15 +113,13 @@ function onMouseWheel( e ) {
 	camera.orbitDistanceFactor( 1 + (e.wheel / 100) * -0.1 );
 }
 
-
-function cameraFollow(element) {
-    var m = element._global_matrix;
-    var eye = [0,0,0];
-    mat4.multiplyVec3( eye, m, [0,4,8] );
-    var center = [0,0,0];
-    mat4.multiplyVec3( center, m, [0,4,0] );
-    var up = [0,0,0];
-    mat4.rotateVec3( up, m, [0,1,0] );
-
-    camera.lookAt(eye, center, up);
+function addFloor(texture, scale){
+    //Floor
+    var floor_node = new RD.SceneNode( {
+        mesh: "planeXZ",
+        color: [1, 1, 1, 1],
+        texture: texture
+    });
+    floor_node.scale(scale);
+    scene.root.addChild(floor_node);
 }
