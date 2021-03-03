@@ -1,4 +1,4 @@
-# Live chat using webGL
+# Live chat using webGL :speech_balloon:
 
 ## Server
 Includes the files to run on the server side
