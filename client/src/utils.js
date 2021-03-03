@@ -41,20 +41,26 @@ function personMovementUpdate(elapsed_time, person){
         hasMoved = true;
     }
 
+    //person.move( elapsed_time, delta );
     vec3.scale( delta, delta, elapsed_time * person.speed );
     delta = person.object.getLocalVector( delta );
     person.object.translate( delta );
     
     if( gl.keys['A'] ) {
         person.object.rotate( elapsed_time * person.speed * 0.2, [0, 1, 0] );
+        //person.rotate( elapsed_time, true );
         hasMoved = true;
     } else if( gl.keys['D'] ) {
         person.object.rotate( -elapsed_time * person.speed * 0.2, [0, 1, 0] );
+        //person.rotate( elapsed_time, false );
         hasMoved = true;
     }
 
-    if ( hasMoved )
+    person.object.position = walk_area.adjustPosition( person.object.position );
+    if ( hasMoved ){
+        person.sendtoServer();
         cameraFollow(person.object);
+    }
 }
 
 function personAnimationUpdate(person, animation){
@@ -70,6 +76,7 @@ function personAnimationUpdate(person, animation){
 function onMouse(e){
 
     if ( !free_cam ) {
+        /*
         if ( e.type == "mousedown" ) {
             var ray = camera.getRay( e.canvasx, e.canvasy );
             var collision = ray.testPlane( [0,0,0], [0, 1, 0] );
@@ -77,7 +84,7 @@ function onMouse(e){
                 me.object.position = ray.collision_point;
                 camera.lookAt( camera.position, me.object.position, [0, 1, 0] );
             }
-        }
+        }*/
     }
     else {
         //orbit to change from where is looking
@@ -100,9 +107,11 @@ function onMouse(e){
 }
 
 function onKey(e){
-    switch( e.code ) {
-        case "ShiftLeft":
+    switch( e.key ) {
+        case "Tab":
             free_cam = !free_cam;
+            e.preventDefault();
+		    e.stopPropagation();
             break;
         default:
             break;

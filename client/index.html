@@ -31,6 +31,18 @@
                     <input class="input-form" id="input-email-signin" type="email" placeholder="Email Adress"/>
                 </div>
 
+                <!--
+                    <form class="form-box">
+                    <label>Username</label>
+                    <input type="text" id="name" required>
+                    <br>
+                    <label>Room name</label>
+                    <input type="text" id="room" required>
+                    <br>
+                    <input type="submit" class="button" value="Enter">
+                    </form>
+                -->
+
                 <div class="user-password text-form">
                     <h2>Password</h2>
                     <input class="input-form" id="input-password-signin" type="password" placeholder="Password"/>
@@ -64,7 +76,7 @@
             </div>
             <div class="buttons">
                 <div class="btn-left">  
-                    <button class="btn" id="btn-close-signin" onclick="closePopUp( true )">SIGN IN</button>
+                    <button class="btn" id="btn-close-signin" onclick="managePopUp( true )">SIGN IN</button>
                 </div>
                 <div class="btn-right">
                     <button class="btn" id="btn-change-signin" onclick="changePopUp( true )">LOGIN</button>
@@ -90,7 +102,7 @@
             </div>
             <div class="buttons">
                 <div class="btn-left">  
-                    <button class="btn" id="btn-close-login" onclick="closePopUp( false )">LOGIN</button>
+                    <button class="btn" id="btn-close-login" onclick="managePopUp( false )">LOGIN</button>
                 </div>
                 <div class="btn-right">
                     <button class="btn" id="btn-change-login" onclick="changePopUp( false )">SIGN IN</button>
@@ -100,39 +112,68 @@
         
     </span>
     
-
-    <div class="flex-container" id="body" style="display: none">
-        <div class="flex-item-left">
-            <h1>ANIMATION HERE</h1>
-            <canvas id="canvas"></canvas>
-        </div>
-        <div class="flex-item-right">
-            <div class="chat-box">
-                <!-- Title -->
-                <div id="chat-header">
-                    <h1>CHAT MESSAGE</h1>
+    <span id="virtual-chat" style="display: none;">
+        <div class="panel">
+            <div class="chat">
+                <!--CONTROLES-->
+                <div class="message">
+                    <span class="user">Anonymous</span><span class="time">12:00</span>
+                    <p>WASD --> Moure player</p>
                 </div>
-                <!-- Messages column -->
-                <div id="chat">
-                    
+                <div class="message">
+                    <span class="user">Anonymous</span><span class="time">12:00</span>
+                    <p>Ratoli --> Moure player on sha clicat</p>
                 </div>
-                <!-- Where to write + send text -->
-                <div id="chat-footer">
-                    <input class="input-form" id="input-text" type="text" placeholder="Write something"/>
-                    <button class="btn" id="btn-send">SEND</button>                
+                <div class="message received-message">
+                    <span class="user">Server</span><span class="time">12:05</span>
+                    <p>Clicar TAB per alternar entre camera lliure y camera que segueix usuari</p>
+                </div><div class="message received-message">
+                    <span class="user">Server</span><span class="time">12:05</span>
+                    <p>Boto esquerre ratoli --> Camera orbital</p>
+                </div>
+                <div class="message received-message">
+                    <span class="user">Server</span><span class="time">12:05</span>
+                    <p>Boto dret ratoli --> Rotar camera</p>
+                </div>
+                <div class="message received-message">
+                    <span class="user">Server</span><span class="time">12:05</span>
+                    <p>Roda ratoli --> Zoom</p>
+                </div>
+                <div class="message received-message">
+                    <span class="user">Server</span><span class="time">12:05</span>
+                    <p>Roda ratoli apretada --> Moure camera</p>
+                </div>
+                <div class="message">
+                    <span class="user">Anonymous</span><span class="time">12:05</span>
+                    <p>Hi ha un BUG que al pulsar el input form, encara que es cliqui a la pantalla segueix esperant text (com que el input no sap que sha clicat a un altre lloc), si es clica el SEND va be</p>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div id="send-form">
+            <div class="input">
+                <input class="input-form" id="input-text" type="text" placeholder="Write something"/>
+            </div>
+            <div class="buttons">
+                <button class="btn" id="btn-send">SEND</button>                
+            </div>
+        </div>
+
+        <canvas width="500" height="500"></canvas>
+    </span>
+    
+
+    <script src="src/client.js"></script>
+    <script src="src/gui.js"></script>
+
     <script src="libs/gl-matrix.js"></script>
     <script src="libs/litegl.js"></script>
     <script src="libs/rendeer.js"></script>
     <script src="libs/wbin.js"></script>
+    <script src="libs/walkArea.js"></script>
     
-    <script src="src/gui.js"></script>
     <script src="src/utils.js"></script>
     <script src="src/user.js"></script>
-    <script src="src/client.js"></script>
     <script src="src/graphics.js"></script>
 
 </body>

@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    overflow: hidden;
     /*Specify font*/
     font-family: 'Yusei Magic', sans-serif;
 }
@@ -13,77 +14,36 @@ h2 {
     font-size: 4vh;
 }
 
-/**FLEXBOX**/
-.flex-container {
-    display: flex;
-    flex-wrap: wrap;
-    height: 100vh;
-    text-align: center;
-}
-  
-.flex-item-left {
-    flex: 75%;
-    background:rgb(181, 223, 181);
-}
+/**PANEL CONTAINING THE CHAT**/
+.panel {
+    position: absolute;
+    right: 3%;
+    top: 3%;
 
-.flex-item-right {
-    flex: 25%;
-    max-width: 25%;
-    text-align: center;
-    background:blue;
-}
-
-@media (max-width: 1200px) {
-    .flex-container {
-        flex-direction: column;
-    }
-
-    .flex-item-right {
-        max-width: 100%;
-        max-height: 25%;
-    }
-}
-
-/**CANVAS REPRESENTATION**/
-#canvas{
-    width: 90%;
-    image-rendering: pixelated;
-}
-
-/**CHAT APPLICATION**/
-.chat-box{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 100%;
-}
-
-#chat-header{
-    background-color: teal;
-}
-
-#chat{
-    flex-grow: 5;
-    background-color: white;
-    text-align: right;
-    height: 100px;
-    overflow-y: scroll;
+    width: 30vw;
+    height: 75vh;
+    background: rgba(92, 91, 90, 0.5);
+    border-radius: 10px;
+    overflow-y: auto;
     overflow-x: hidden;
+}
+
+.chat {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 2%;
+    padding: 1%;
 }
 
 /**MESSAGES**/
 .message{
-    background-color: rgb(132, 226, 132);
+    background-color: rgba(132, 226, 132, 0.8);
     padding: 1% 2% 1% 2%;
     margin-top: 1.5%;
     border-radius: 5px;
     width: fit-content;
     max-width: 95%;
-    min-width: 15%;
+    min-width: 20%;
     /*If the text inside is too long*/
     word-wrap: break-word;
     margin-right: 0%;
@@ -93,7 +53,7 @@ h2 {
 /*Received messages*/
 .received-message {
     text-align: left;
-    background: rgb(47, 141, 94);
+    background: rgba(87, 175, 131, 0.8);
     margin-right: auto;
     margin-left: 0;
 }
@@ -129,39 +89,20 @@ h2 {
     background-color: greenyellow;
 }
 
-/**FOOTER**/
-#chat-footer{
-    padding: 20px 0;
+.name {
+    position: absolute;
+    background: rgba(255, 0, 0, 0.582);
+    left: 3%;
+    top: 3%;
+    padding: 1%;
     display: flex;
+    align-items: center;
     justify-content: center;
-    background-color: firebrick;
-}
-
-#chat-footer input{
-    margin-right: 10px;
-    padding: 4px;
-    width: 60%;
-    outline: none;
-    border: 2px solid rgb(178, 34, 34);
-    border-radius: 4px;
-}
-
-#chat-footer input:focus {
-    border: 2px solid rgb(228, 143, 143);
-}
-
-#chat-footer button{
-    padding: 0 15px;
-    background-color: rgb(240, 184, 184);
-    border: none;
-    cursor: pointer;
     border-radius: 10px;
-    border: 1px solid rgb(255, 0, 0);
 }
 
-#chat-footer button:hover {
-    background: rgb(124, 72, 72);
-    color: white;
+.name p {
+    font-size: 2vh;
 }
 
 /***POP UP CARD***/
@@ -260,7 +201,9 @@ h2 {
     grid-template-areas: "btn-left btn-right";
 }
 
-
+#signin .input-form {
+    height: 30%;
+}
 
 /***LOGIN***/
 #login {
@@ -345,4 +288,64 @@ h2 {
 
 .input-form:focus {
     border: 2px solid rgb(89, 163, 118);
+}
+
+
+/******************/
+#send-form {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70vw;
+    height: 5vh;
+    display: grid;
+    grid-template-columns: 80% 19%;
+    grid-template-areas: "input button";
+    grid-column-gap: 1%;
+    padding: 2%;
+}
+
+#send-form .input {
+    grid-area: input;
+    width: 100%;
+    height: 100%;
+}
+
+#send-form .buttons {
+    grid-area: button;
+    width: 100%;
+    height: 100%;
+}
+
+#send-form .input-form{
+    width: 100%;
+    max-width: 95%;
+    height: 100%;
+    max-height: 70%;
+    padding: 4px;
+    outline: none;
+    border: 2px solid rgb(178, 34, 34);
+    border-radius: 4px;
+}
+
+#send-form input:focus {
+    border: 2px solid rgb(228, 143, 143);
+}
+
+#send-form button{
+    width: 100%;
+    height: 100%;
+    padding: 0 15px;
+    background-color: rgb(240, 184, 184);
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid rgb(255, 0, 0);
+    outline: none;
+}
+
+#send-form button:hover {
+    background: rgb(124, 72, 72);
+    color: white;
 }

@@ -72,15 +72,15 @@ function changePopUp( isSignIn ) {
 }
 
 
-//Close PopUp and obtain the username + room
-function closePopUp( isSignIn ) {
-    var validCredentials = true;
+//manage PopUp and obtain the username + room
+function managePopUp( isSignIn ) {
+    var isAllFilled = true;
 
     if ( isSignIn ) {
         //SIGN IN
         
         //get character selected
-        mysprite = document.getElementById("Mycharacters").value;
+        mytexture = document.getElementById("Mycharacters").value;
 
         //get room name
         room_id = 0; //parseInt(document.getElementById("Myrooms").value);
@@ -93,52 +93,83 @@ function closePopUp( isSignIn ) {
             document.getElementById( "input-user-name-signin" ).value = "";
         }
 
-        //Send updated info to server
-        /*socket.send( JSON.stringify({ 
-            type: "ready", id: myid, username: myusername, content: {
-                id: myid, username: myusername, sprite: mysprite, roomID: room_id  
-            }}
-        ));*/
+        var usr_email = document.getElementById( "input-email-signin" ).value;
+        if ( usr_email ) {
+            document.getElementById( "input-email-signin" ).value = "";
+        }
+
+        var usr_password = document.getElementById( "input-password-signin" ).value;
+        if ( usr_password ) {
+            document.getElementById( "input-password-signin" ).value = "";
+        }
+
+        if ( input_user == "" || usr_email == "" || usr_password == "" ) {
+            isAllFilled = false;
+        }
+
+        if ( isAllFilled ) {
+            //Send updated info to server
+            socket.send( JSON.stringify({ 
+                type: "signin", id: 0, username: input_user, content: {
+                    id: 0, username: input_user, texture: mytexture, roomID: room_id, password: usr_password, email: usr_email 
+                }}
+            ));
+        } else {
+            alert("Fill all the camps!");
+        }
+        
     } else {
         //LOGIN
         //get user name
-        var name = document.getElementById( "input-user-name-login" ).value;
+        var input_user = document.getElementById( "input-user-name-login" ).value;
         //Reset the value of the input form
         document.getElementById( "input-user-name-login" ).value = "";
 
         //get password
-        var password = document.getElementById( "input-password-login" ).value;
+        var usr_password = document.getElementById( "input-password-login" ).value;
         document.getElementById( "input-password-login" ).value = "";
         
         //send to the server to check if they are correct
 
         //if not
-        validCredentials = false;
-        alert("Invalid credentials");
-    }
+        if ( input_user == "" || usr_password == "" ) {
+            isAllFilled = false;
+        }
 
-    //init main virtual chat
-    if( validCredentials ) {
-        //Close pop Up
-        let popup = document.getElementById( "pop-up" );
-        popup.style.display = "none";
-        document.getElementById("body").style.display = "flex";
-    }
-    
+        if ( isAllFilled ) {
+            //Send updated info to server
+            socket.send( JSON.stringify({ 
+                type: "login", id: 0, username: input_user, content: {
+                    password: usr_password  
+                }}
+            ));
+        } else {
+            alert("Fill all the camps!");
+        }
+    }   
 }
 
-//Change Screen to login or sign in
-/* //SE HACE EN EL HTML SINO DA PROBLEMAS
-var changeSignin = document.getElementById( "btn-change-signin" );
-changeSignin.addEventListener( "click", changePopUp( true ) );
+function closePopUp( data ) {
+    var popup = document.getElementById( "pop-up" );
+    popup.style.display = "none";
 
-var changeLogin = document.getElementById( "btn-change-login" );
-changeLogin.addEventListener( "click", changePopUp( false ) );
+    var vc = document.getElementById( "virtual-chat" );
+    vc.style.display = "";
 
-//Close pop up button
-var closeSignin = document.querySelector( "#btn-close-signin" );
-closeSignin.addEventListener( "click", closePopUp( true ) );
+    var div = document.createElement("div");
+    div.className = "name";
 
-var closeLogin = document.querySelector( "#btn-close-login" );
-closelogin.addEventListener( "click", closePopUp( false ) );
-*/
+    var p = document.createElement("p");
+    var text = document.createTextNode( data.content.username );
+
+    p.appendChild( text );
+    div.appendChild( p );
+    vc.appendChild( div );
+
+    /**************/
+    myid = data.content.id;
+    myusername = data.content.username;
+
+    //Init virtual chat
+    init(data);
+}

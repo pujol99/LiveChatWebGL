@@ -6,7 +6,9 @@ var port = "9017";
 var url = "ecv-etic.upf.edu/node/" + port + "/ws/" + server_room;
 
 var socket = new WebSocket( "wss://" + url );
-
+var mytexture ="man1";
+var myid = -1;
+var myusername = "Anonymous";
 
 /*****SOCKET FUNCTIONS*****/
 socket.onopen = function(){  
@@ -20,12 +22,10 @@ socket.addEventListener("close", function(e) {
 socket.onmessage = function(msg){
     try {
         var data = JSON.parse( msg.data );
+        console.log(data);
         if( 'type' in data) {
-            if ( data.type == "text" || data.type == "near" ) {
-                displayMessage(true, 'username' in data ? data.username : '', data.content, 'time' in data ? data.time : '');
-            } else if ( data.type == "welcome" ) {
-                me.id = data.content.id;
-                me.pos = data.content.pos;
+            if ( data.type == "text") {
+                displayMessage(true, data.username, data.content, data.time);
             } else if ( data.type == "roominfo" ) {
                 me.room_id = data.content.room.id;
             } else if ( data.type == "newuser" ||  data.type == "existentuser") {
@@ -34,8 +34,23 @@ socket.onmessage = function(msg){
             } else if ( data.type == "removeuser") {
                 removeFromUsers( data.content );
             } else if ( data.type == "updatepos") {
-                updateUserPos(data.id, data.content.pos);
-            }
+                console.log(data.id.toString() + " has moved");
+                //updateUserPos(data.id, data.content.pos);
+            } else if ( data.type == "login_petition" ) {
+                if ( data.content.success == true ) {
+                    console.log("LOGIN SUCCESS, your id: " + data.content.id + " and username: " + data.content.username );
+                    closePopUp( data );
+                } else {
+                    alert("Invalid credentials");
+                }
+            } else if ( data.type == "signin_petition" ) {
+                if ( data.content.success == true ) {
+                    console.log( "SIGN IN success, your id: " + data.content.id + " and username: " + data.content.username );
+                    closePopUp( data );
+                } else {
+                    alert("This user already exists!");
+                }
+            } 
         }
     } catch ( e ) {
         console.error("ERROR: " + e);
@@ -60,7 +75,7 @@ function sendMessage( message ) {
 
     //Send it to the server
     socket.send( JSON.stringify(
-        { id: me.id, username: me.username, content: message, time: mytime }
+        { type: "text", id: me.id, username: me.username, content: message, time: mytime }
     ) );
 
     displayMessage( false, "Me", message, mytime);
@@ -76,8 +91,7 @@ function addToUsers( author_id, _username, _mesh, _texture, _position ) {
         }
     }
     //TODO username id
-    users_connected.push( new User(
-        _mesh, _texture, _position ));
+    users_connected.push( new User(_mesh, _texture, _position ));
 }
 
 function getUserById( id ){
